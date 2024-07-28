@@ -17,15 +17,15 @@ namespace ProjetoCrud.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
+            ViewData["Message"] = "Curso C# completo ASP.NET";
+            ViewData["Usuario"] = "Artur Cadorin";
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
-
+            ViewData["Message"] = "Página de contato.";
+            
             return View();
         }
 

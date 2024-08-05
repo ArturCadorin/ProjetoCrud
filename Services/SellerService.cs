@@ -20,6 +20,13 @@ namespace ProjetoCrud.Services
         {
             return _context.Seller.ToList();
         }
+
+        // Inserindo seller no banco de dados
+        public void Insert(Seller obj)
+        {
+            _context.Add(obj);
+            _context.SaveChanges();
+        }
     }
 
 }

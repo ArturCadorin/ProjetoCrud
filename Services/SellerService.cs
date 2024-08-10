@@ -7,6 +7,7 @@ namespace ProjetoCrud.Services
 {
     public class SellerService
     {
+        // Injeção de dependência
         private readonly ProjetoCrudContext _context;
 
         public SellerService(ProjetoCrudContext context)
@@ -14,7 +15,7 @@ namespace ProjetoCrud.Services
             _context = context;
         }
 
-        // Procurando por Seller no banco de dados
+        // Retornando os Sellers do banco de dados
 
         public List<Seller> FindAll()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace ProjetoCrud.Models
 {
@@ -9,10 +10,11 @@ namespace ProjetoCrud.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; } 
         public double BaseSalary { get; set; }
         // public Department = departamento do seller(vendedor)
         public Department Department { get; set; }
+        public int? DepartmentId {  get; set; }
         // public ICollection<SalesRecord> = lista de genéricos para registar as vendas do seller(vendedor)
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
 

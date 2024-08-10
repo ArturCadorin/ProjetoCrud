@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Sellers\Create.cshtml" />
+    <Content Remove="Views\Sellers\Remove.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,10 +48,16 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Sellers\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Sellers\Remove.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Sellers\Create.cshtml" />
+    <None Include="Views\Sellers\Remove.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Sellers\Remove.cshtml" />
   </ItemGroup>
 
 </Project>

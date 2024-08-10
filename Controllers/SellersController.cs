@@ -24,6 +24,7 @@ namespace ProjetoCrud.Controllers
             return View(list);
         }
 
+        // Criando Seller 
         public IActionResult Create()
         {
             var departments = _departmentService.FindAll();
@@ -31,11 +32,37 @@ namespace ProjetoCrud.Controllers
             return View(viewModel);
         }
 
+        // Método post para criação do Seller
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
             _sellerService.Insert(seller);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Deletando Seller
+        public IActionResult Remove(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var obj = _sellerService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        // Método Post para deleção do seller
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Remove(int id) 
+        { 
+            _sellerService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -15,11 +15,25 @@ namespace ProjetoCrud.Services
             _context = context;
         }
 
-        // Retornando os Sellers do banco de dados
+        // Retornando todos os vendedores do banco de dados
 
         public List<Seller> FindAll()
         {
             return _context.Seller.ToList();
+        }
+
+        // Retornando vendedor do banco de dados
+        public Seller FindById(int id) 
+        { 
+        return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+        }
+
+        // Removendo vendedor do banco de dados 
+        public void Remove(int id)
+        {
+            var obj = _context.Seller.Find(id);
+            _context.Seller.Remove(obj);
+            _context.SaveChanges();
         }
 
         // Inserindo seller no banco de dados

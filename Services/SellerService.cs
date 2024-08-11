@@ -2,6 +2,7 @@
 using ProjetoCrud.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoCrud.Services
 {
@@ -22,13 +23,13 @@ namespace ProjetoCrud.Services
             return _context.Seller.ToList();
         }
 
-        // Retornando vendedor do banco de dados
+        // Retornando vendedor do banco de dados e realizando o join com o departamento
         public Seller FindById(int id) 
         { 
-        return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+        return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
         }
 
-        // Removendo vendedor do banco de dados 
+        // Removendo vendedor do banco de dados     
         public void Remove(int id)
         {
             var obj = _context.Seller.Find(id);

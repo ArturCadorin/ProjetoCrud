@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProjetoCrud.Services.Exceptions;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using System.Threading.Tasks;
 
 namespace ProjetoCrud.Services
 {
@@ -18,46 +18,46 @@ namespace ProjetoCrud.Services
             _context = context;
         }
 
-        // Retornando todos os Seller do banco de dados
-
-        public List<Seller> FindAll()
+        // Método assincrono que retorna uma lista com os Seller
+        public async Task<List<Seller>> FindAllAsync()
         {
-            return _context.Seller.ToList();
+            return await _context.Seller.ToListAsync();
         }
 
-        // Retornando vendedor do banco de dados e realizando o JOIN com o departamento
-        public Seller FindById(int id) 
+        // Método assincrono que retorna Seller pelo seu ID
+        public async Task<Seller> FindByIdAsync(int id) 
         { 
-        return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
+        return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
-        // Removendo vendedor do banco de dados     
-        public void Remove(int id)
+        // Método assincrono que remove Seller   
+        public async Task RemoveAsync(int id)
         {
             var obj = _context.Seller.Find(id);
             _context.Seller.Remove(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        // Inserindo Seller no banco de dados
-        public void Insert(Seller obj)
+        // Método assincrono que inseri Seller no banco de dados
+        public async Task InsertAsync(Seller obj)
         {
             _context.Add(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        // Atualizando Seller no banco de dados
-        public void Update(Seller obj) 
+        // Método assincrono que atualiza Seller no banco de dados
+        public async Task UpdateAsync(Seller obj) 
         {
-            // se não existir
-            if (!_context.Seller.Any(x => x.Id == obj.Id))
+            // Verificando se Seller já existe no banco de dados
+            var hasAny = await _context.Seller.AnyAsync(x => x.Id == obj.Id);
+            if (!hasAny)
             {
                 throw new KeyNotFoundException("Id not found");
             }
             try
             {
                 _context.Update(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException e)
             {

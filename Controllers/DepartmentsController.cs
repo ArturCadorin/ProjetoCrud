@@ -12,6 +12,7 @@ namespace ProjetoCrud.Controllers
 {
     public class DepartmentsController : Controller
     {
+        // Injeção de dependência
         private readonly ProjetoCrudContext _context;
 
         public DepartmentsController(ProjetoCrudContext context)
@@ -19,6 +20,7 @@ namespace ProjetoCrud.Controllers
             _context = context;
         }
 
+        // Métodos gerados automaticamente pela ferramenta
         // GET: Departments
         public async Task<IActionResult> Index()
         {
@@ -145,6 +147,7 @@ namespace ProjetoCrud.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Confere se o Departamento existe
         private bool DepartmentExists(int id)
         {
             return _context.Department.Any(e => e.Id == id);

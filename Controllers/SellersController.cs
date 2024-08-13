@@ -6,6 +6,7 @@ using ProjetoCrud.Services.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace ProjetoCrud.Controllers
 {
@@ -21,38 +22,45 @@ namespace ProjetoCrud.Controllers
             _departmentService = departmentService;
         }
 
-        // passando a lista de Seller para a view
-        public IActionResult Index()
+        // Método GET para listar todos os Seller
+        public async Task<IActionResult> Index()
         {
-            var list = _sellerService.FindAll();
+            var list = await _sellerService.FindAllAsync();
             return View(list);
         }
 
-        // Criando Seller 
-        public IActionResult Create()
+        // Método GET para cadasto do Seller
+        public async Task<IActionResult> Create()
         {
-            var departments = _departmentService.FindAll();
+            var departments = await _departmentService.FindAllAsync();
             var viewModel = new SellerFormViewModel { Departments = departments };
             return View(viewModel);
         }
 
-        // Método post para criação do Seller
+        // Método POST para cadastro do Seller
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seller seller)
+        public async Task<IActionResult> Create(Seller seller)
         {
-            _sellerService.Insert(seller);
+            // Validando preenchimento no servidor
+            if (!ModelState.IsValid)
+            {
+                var departments = await _departmentService.FindAllAsync();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+            await _sellerService.InsertAsync(seller);
             return RedirectToAction(nameof(Index));
         }
 
-        // Deletando Seller
-        public IActionResult Remove(int? id)
+        // Método GET para remover o Seller
+        public async Task<IActionResult> Remove(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -61,23 +69,23 @@ namespace ProjetoCrud.Controllers
             return View(obj);
         }
 
-        // Método Post para deleção do seller
+        // Método POST para remover o Seller
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Remove(int id) 
+        public async Task<IActionResult> Remove(int id) 
         { 
-            _sellerService.Remove(id);
+            await _sellerService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        // Mostrando os detalhes do Seller
-        public IActionResult Details(int? id)
+        // Método GET para mostrar os detalhes do Seller
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -86,8 +94,8 @@ namespace ProjetoCrud.Controllers
             return View(obj);
         }
 
-        // Editar Seller
-        public IActionResult Edit(int? id)
+        // Método GET para editar o Seller
+        public async Task<IActionResult> Edit(int? id)
         {
             // se id for nulo
             if(id == null)
@@ -96,29 +104,38 @@ namespace ProjetoCrud.Controllers
             }
 
             // se id não existir no banco de dados
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
-
-            List<Department> departments = _departmentService.FindAll();
+            // Criando uma lista com todos os Departamentos
+            List<Department> departments = await _departmentService.FindAllAsync();
+            // Instanciando a ViewModel com o Seller e uma lista de Departamentos
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
             return View(viewModel);
         }
 
-        // Método post para edição do seller
+        // Método POST para editar o Seller
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Seller seller) 
-        { 
+        public async Task<IActionResult> Edit(int id, Seller seller) 
+        {
+            // Validando preenchimento no servidor
+            if (!ModelState.IsValid)
+            {
+                var departments = await _departmentService.FindAllAsync();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+
             if (id != seller.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
             try
             {
-                _sellerService.Update(seller);
+                await _sellerService.UpdateAsync(seller);
                 return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException e)
@@ -127,6 +144,7 @@ namespace ProjetoCrud.Controllers
             }
         }
 
+        // Método GET para as telas de erro
         public IActionResult Error(string message)
         {
             var viewModel = new ErrorViewModel

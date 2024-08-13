@@ -2,6 +2,8 @@
 using ProjetoCrud.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoCrud.Services
 {
@@ -15,10 +17,10 @@ namespace ProjetoCrud.Services
             _context = context;
         }
 
-        // Retornando os departamentos do banco de dados ordenadamente
-        public List<Department> FindAll()
+        // Método assincrono que retorna uma lista com os Departamentos ordenados
+        public async Task<List<Department>> FindAllAsync()
         {
-            return _context.Department.OrderBy(x => x.Name).ToList();
+            return await _context.Department.OrderBy(x => x.Name).ToListAsync();
         }
 
 

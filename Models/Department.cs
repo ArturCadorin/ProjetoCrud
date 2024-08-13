@@ -9,7 +9,7 @@ namespace ProjetoCrud.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        // public ICollection<Seller> = coleção generica da classe sellers(vendedores)
+        // Coleção de Sellers
         public ICollection<Seller> Sellers { get; set; } = new List<Seller>();
 
         public Department(){ }
@@ -19,7 +19,7 @@ namespace ProjetoCrud.Models
             Name = name;
         }
 
-        // Adcionando um vendedor
+        // Adcionando um novo Seller a coleção já existente
         public void AddSellers(Seller seller)
         {
             Sellers.Add(seller);

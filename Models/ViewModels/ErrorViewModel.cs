@@ -2,6 +2,7 @@ using System;
 
 namespace ProjetoCrud.Models.ViewModels
 {
+    // Classe para as telas de Erro
     public class ErrorViewModel
     {
         public string RequestId { get; set; }
